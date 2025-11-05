@@ -106,3 +106,12 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserCount = async (req, res, next) => {
+  try {
+    const userCount = await User.countDocuments();
+    res.status(200).json({ userCount });
+  } catch (error) {
+    next(error);
+  }
+};
