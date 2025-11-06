@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4e6bff;
+  --color-background: #0d0d18;
+  --color-surface: #1c1c2a;
+  --color-input: #2a2a3b;
+  --color-textColor: #e5e7eb;
+  --color-textMuted: #9ca3af;
+}
+
+@layer utilities {
+  .input {
+    @apply w-full bg-input rounded-lg px-3 py-2.5 text-slate-200 placeholder-textMuted focus:outline-none;
+  }
+
+  .input-label {
+    @apply block mb-1 text-sm font-medium text-textColor;
+  }
+
+  .btn {
+    @apply bg-primary text-textColor font-semibold py-2 px-4 rounded-lg hover:bg-primary/95 cursor-pointer focus:outline-none;
+  }
+}
