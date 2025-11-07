@@ -2,18 +2,11 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import ChatPage from "../pages/ChatPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
-import { useEffect, useState } from "react";
 import axiosInstance from "../lib/axios";
+import { useAuth } from "../context/context";
 
 const App = () => {
-  const [authUser, setAuthUser] = useState(null);
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setAuthUser(JSON.parse(user));
-    }
-  }, []);
+  const { authUser, setAuthUser } = useAuth();
 
   const handleLogout = async () => {
     await axiosInstance.post("/users/logout");
@@ -38,7 +31,7 @@ const App = () => {
           path="/login"
           element={
             !authUser ? (
-              <LoginPage setAuthUser={setAuthUser} />
+              <LoginPage />
             ) : (
               <Navigate to="/" />
             )
@@ -48,7 +41,7 @@ const App = () => {
           path="/register"
           element={
             !authUser ? (
-              <RegisterPage setAuthUser={setAuthUser} />
+              <RegisterPage />
             ) : (
               <Navigate to="/" />
             )

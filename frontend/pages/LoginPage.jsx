@@ -1,10 +1,13 @@
 import { useState } from "react";
 import axiosInstance from "../lib/axios";
+import { useAuth } from "../context/context";
 
-const LoginPage = ({ setAuthUser }) => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { setAuthUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +20,7 @@ const LoginPage = ({ setAuthUser }) => {
       setAuthUser(res.data.user);
       localStorage.setItem("user", JSON.stringify(res.data.user));
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Login failed:", error?.response?.data || error.message);
     } finally {
       setIsLoading(false);
     }

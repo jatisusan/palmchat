@@ -1,11 +1,14 @@
 import { useState } from "react";
 import axiosInstance from "../lib/axios";
+import { useAuth } from "../context/context";
 
-const RegisterPage = ({ setAuthUser }) => {
+const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { setAuthUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
