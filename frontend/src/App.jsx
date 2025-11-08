@@ -9,9 +9,13 @@ const App = () => {
   const { authUser, setAuthUser } = useAuth();
 
   const handleLogout = async () => {
-    await axiosInstance.post("/users/logout");
-    localStorage.removeItem("user");
-    setAuthUser(null);
+    try {
+      await axiosInstance.post("/users/logout");
+      localStorage.removeItem("user");
+      setAuthUser(null);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -29,23 +33,11 @@ const App = () => {
         />
         <Route
           path="/login"
-          element={
-            !authUser ? (
-              <LoginPage />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
+          element={!authUser ? <LoginPage /> : <Navigate to="/" />}
         />
         <Route
           path="/register"
-          element={
-            !authUser ? (
-              <RegisterPage />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
+          element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
         />
       </Routes>
     </div>

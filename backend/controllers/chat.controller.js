@@ -1,4 +1,5 @@
 import ApiError from "../lib/apiError.js";
+import { io } from "../lib/socket.js";
 import Chat from "../models/chat.model.js";
 
 export const sendMessage = async (req, res, next) => {
@@ -7,6 +8,17 @@ export const sendMessage = async (req, res, next) => {
   try {
     const newMessage = await Chat.create({ sender: req.user._id, message });
     if (!newMessage) throw new ApiError(500, "Failed to send message.");
+
+    io.emit("newMessage", {
+      _id: newMessage._id,
+      sender: {
+        _id: req.user._id,
+        username: req.user.username,
+      },
+      message: newMessage.message,
+      createdAt: newMessage.createdAt,
+    });
+
     res.status(201).json({ message: "Message sent successfully." });
   } catch (error) {
     next(error);
