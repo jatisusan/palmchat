@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axiosInstance from "../lib/axios";
 import { useAuth } from "../context/context";
 
@@ -6,11 +6,21 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const { setAuthUser } = useAuth();
 
+  // Auto-dismiss error after 3 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
     try {
       const res = await axiosInstance.post("/users/login", {
@@ -20,7 +30,10 @@ const LoginPage = () => {
       setAuthUser(res.data.user);
       localStorage.setItem("user", JSON.stringify(res.data.user));
     } catch (error) {
-      console.error("Login failed:", error?.response?.data || error.message);
+      const errorMessage =
+        error?.response?.data?.error || error.message || "Login failed";
+      setError(errorMessage);
+      console.error("Login failed:", errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -29,6 +42,11 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col items-center justify-center space-y-6 bg-surface rounded-lg w-full h-full md:max-w-md md:h-auto p-8 max-sm:p-4">
       <h2 className="text-xl font-semibold">Log in to your account</h2>
+      {error && (
+        <div className="w-full bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
       <form
         onSubmit={handleSubmit}
         className="w-full flex flex-col items-center justify-center space-y-5 "

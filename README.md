@@ -6,7 +6,7 @@ Rename .env.example to .env in the backend folder and replace the values.
 
 ```bash
 MONGODB_URI=Your_MongoDB_connection_string
-PORT=Your_desired_port_number
+PORT=5000
 JWT_SECRET=Your_JWT_secret_key
 ```
 
@@ -26,3 +26,5 @@ JWT_SECRET=Your_JWT_secret_key
    npm install
    npm run dev
    ```
+
+Note: The backend runs on port 5000, which matches the frontend Axios base URL.
